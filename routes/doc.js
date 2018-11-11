@@ -67,7 +67,7 @@ router.put('/:doc_name', (req, res) => {
     }
     Doc.addContent(query, req.body, (err, doc) => {
         if(err){
-            res.status(500).send({message: 'Error while getting doc.'});
+            res.status(500).send({message: 'Error while updating doc.'});
             console.log(err);
         }
         res.send(({message: "Document updated sucesfully."}));
