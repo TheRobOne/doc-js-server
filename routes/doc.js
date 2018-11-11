@@ -3,16 +3,17 @@ const router =  express.Router();
 
 let Doc = require('../models/doc');
 
+//create new doc
 router.post('/add', (req, res) => {
     const query = {
         name: req.body.name
     }
-    Doc.getDocs(query, (err, docs) => {
+    Doc.getDocs((err, docs) => {
         if(err) {
             res.status(500).send({message: 'Error while getting docs.'});
             console.log(err)
         }
-        if(docs.length > 0){
+        if(docs.some(doc => doc.name === req.body.name)){
             res.status(405).send({message: 'Doc with given name already exists!'});
         } else {
             Doc.addDoc(req.body, (err, doc) => {
@@ -26,26 +27,24 @@ router.post('/add', (req, res) => {
     })
 });
 
-router.get('/:user_id/all', (req, res) => {
-    const query = {
-        user_id: req.params.user_id
-    }
-    Doc.getDocs(query, (err, docs) => {
+//get all docs, from all authors
+router.get('/all', (req, res) => {
+    Doc.getDocs((err, docs) => {
         if(err) {
             res.status(500).send({message: 'Error while getting docs.'});
             console.log(err)
         }
         if (docs.length === 0) {
-            res.send({message: 'There are not any documents for user with given id.'})
+            res.send({message: 'There are not any documents in database.'})
         } else{
             res.send(docs);
         }
     })
 })
 
-router.get('/:user_id/:doc_name', (req, res) => {
+//get one doc by name
+router.get('/:doc_name', (req, res) => {
     const query = {
-        user_id: req.params.user_id,
         name: req.params.doc_name
     }
     Doc.getOneDoc(query, (err, doc) => {
@@ -61,9 +60,9 @@ router.get('/:user_id/:doc_name', (req, res) => {
     })
 });
 
-router.put('/:user_id/:doc_name', (req, res) => {
+//update doc content and locked using doc name
+router.put('/:doc_name', (req, res) => {
     const query = {
-        user_id: req.params.user_id,
         name: req.params.doc_name
     }
     Doc.addContent(query, req.body, (err, doc) => {
@@ -75,9 +74,9 @@ router.put('/:user_id/:doc_name', (req, res) => {
     });
 })
 
-router.delete('/:user_id/:doc_name', (req, res) => {
+//delete doc
+router.delete('/:doc_name', (req, res) => {
     const query = {
-        user_id: req.params.user_id,
         name: req.params.doc_name
     }
     Doc.getOneDoc(query, (err, doc) => {

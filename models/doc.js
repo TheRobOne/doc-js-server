@@ -18,13 +18,17 @@ const DocSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    locked: {
+        type: Boolean,
+        default: false
     }
 });
 
 let Doc = module.exports = mongoose.model('docs', DocSchema);
 
-module.exports.getDocs = (query, callback) => {
-    Doc.find(query, callback);
+module.exports.getDocs = (callback) => {
+    Doc.find({}, callback);
 }
 
 module.exports.getOneDoc = (id, callback) => {
