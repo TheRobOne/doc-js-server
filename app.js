@@ -27,6 +27,7 @@ app.use(bodyParser.json());
 let doc = require('./routes/doc');
 app.use('/doc', doc);
 
-app.get('/', (req, res) => res.send({message: 'Hello World!'}))
+app.get('/', (req, res) => res.send({message: 'Hello World!'}));
+app.all('*', (req, res) => res.status(404).send({message:"Nothing is here"}));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
