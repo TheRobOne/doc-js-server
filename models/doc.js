@@ -22,6 +22,9 @@ const DocSchema = new Schema({
     locked: {
         type: Boolean,
         default: false
+    },
+    editor: {
+        type: String
     }
 });
 
