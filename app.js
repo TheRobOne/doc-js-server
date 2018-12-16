@@ -26,13 +26,6 @@ mongoose
 //body parser middleware
 app.use(bodyParser.json());
 
-//route files
-let doc = require('./routes/doc');
-app.use('/doc', doc);
-
-app.get('/', (req, res) => res.send({message: 'Hello World!'}));
-app.all('*', (req, res) => res.status(404).send({message:"Nothing is here"}));
-
 const server = http.createServer(app);
 
 
@@ -44,14 +37,21 @@ io.serveClient('origins', '*:*');
 io.on('connection', socket => {
     console.log('Now client connected');
 
-    socket.on('document added', (docName) => {
-        console.log(`New doc added, name is: ${docName}`)
-        io.sockets.emit('new document delivered', docName)
-    })
-
     socket.on('disconnect', () => {
         console.log('Now client disconnected')
     })
 })
+
+app.use(function(req,res,next){
+    req.io = io;
+    next();
+});
+
+//route files
+let doc = require('./routes/doc');
+app.use('/doc', doc);
+
+app.get('/', (req, res) => res.send({message: 'Hello World!'}));
+app.all('*', (req, res) => res.status(404).send({message:"Nothing is here"}));
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))

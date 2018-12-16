@@ -166,3 +166,10 @@ response on fail __[Status: 500]__
     "message": "Error while deleting doc."
 }
 ```
+
+## Sockets
+
+Sockets are aviavable in 3 routes:
+- `/doc/add` - listen for event 'new document delivered' it gives you whole doc as json
+- `/doc/delete/doc_name` - listen for event 'document deleted' it gives you message 'Document _doc_name_ deleted.'
+- `/doc/doc_name` - route for update, both update content, or lock doc, or even update doc name - listen for event 'document updated' (or 'document locked' for lock update) it gives you message 'Document _doc_name_ updated.' (or 'Document _doc_name_ locked.')

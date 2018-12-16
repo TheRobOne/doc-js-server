@@ -22,6 +22,7 @@ router.post('/add', (req, res) => {
                     console.log(err);
                 }
                 res.status(201).send({message: 'Doc created sucesfully!'});
+                req.io.sockets.emit('new document delivered', req.body);
             });
         }
     })
@@ -71,6 +72,11 @@ router.put('/:doc_name', (req, res) => {
             console.log(err);
         }
         res.send(({message: "Document updated sucesfully."}));
+        if(req.body.locked){
+            req.io.sockets.emit('document locked', `Document ${query} locked.`);
+        } else {
+            req.io.sockets.emit('document updated', `Document ${query} updated.`);
+        }
     });
 })
 
@@ -93,6 +99,7 @@ router.delete('/:doc_name', (req, res) => {
                     console.log(err);
                 }
                 res.send(({message: "Document deleted sucesfully."}));
+                req.io.sockets.emit('document deleted', `Document ${query} deleted.`);
             });
         }
     })
