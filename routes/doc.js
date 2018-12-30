@@ -73,9 +73,9 @@ router.put('/:doc_name', (req, res) => {
         }
         res.send(({message: "Document updated sucesfully."}));
         if(req.body.locked){
-            req.io.sockets.emit('document locked', `Document ${query} locked.`);
+            req.io.sockets.emit('document locked', doc);
         } else {
-            req.io.sockets.emit('document updated', `Document ${query} updated.`);
+            req.io.sockets.emit('document updated', doc);
         }
     });
 })
