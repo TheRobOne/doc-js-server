@@ -99,7 +99,7 @@ router.delete('/:doc_name', (req, res) => {
                     console.log(err);
                 }
                 res.send(({message: "Document deleted sucesfully."}));
-                req.io.sockets.emit('document deleted', `Document ${query} deleted.`);
+                req.io.sockets.emit('document deleted', doc);
             });
         }
     })
